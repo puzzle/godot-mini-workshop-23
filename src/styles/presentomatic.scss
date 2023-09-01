@@ -1,0 +1,114 @@
+$title-slide-bg: #1E5A96;
+$title-slide-fg: white;
+
+$normal-slide-bg: white;
+$normal-slide-fg: #1E5A96;
+
+html, body, main {
+  width: 100vw;
+  height: 100vh;
+}
+
+main {
+  font-size: 200% !important;
+  overflow: hidden;
+
+  background-color: $normal-slide-bg;
+
+  transition: all 600ms;
+
+  &.title-slide {
+    background-color: $title-slide-bg;
+    color: $title-slide-fg;
+  }
+
+  > div {
+    position: fixed;
+    padding: 5vh 10vw;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    color: $normal-slide-fg;
+
+    &.title-slide {
+      color: $title-slide-fg;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;  
+    }
+
+    > div.hljs {
+      position: relative;
+      cursor: pointer;
+      border-radius: 0.4em;
+      margin: 0.5em 0;
+      white-space: pre;
+      overflow: hidden;
+
+      &::after {
+        position: absolute;
+        right: 1em;
+        bottom: 1.5em;
+        opacity: 0.3;
+        font-size: 60%;
+        content: "Click to copy";
+      }
+    }
+
+    code.hljs {
+      background: #011627;
+      display: inline;
+    }
+
+    ul {
+      list-style-type: disc;
+    }
+
+    ol {
+      list-style-type: decimal;
+    }
+
+    img {
+      max-width: 60vmin;
+      max-height: 60vmin;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}
+
+nav {
+  position: fixed;
+  bottom: 1em;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  left: 5vw;
+  right: 5vw;
+  > div {
+    margin: 0.1em;
+    padding: 0.1em;
+    cursor: pointer;
+    border-radius: 0.3em;
+    border: 1px solid black;
+    background-color: white;
+    min-width: 2em;
+    text-align: center;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+
+    background-color: $normal-slide-bg;
+    color: $normal-slide-fg;
+
+    &.title-slide {
+      background-color: $title-slide-bg;
+      color: $title-slide-fg;
+    }
+
+    &.selected {
+      border-width: 2px;
+      border-color: red;
+    }
+  }
+}
