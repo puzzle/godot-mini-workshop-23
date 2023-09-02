@@ -7,7 +7,7 @@ import hljs from "highlight.js";
 import javascript from "highlight.js/lib/languages/javascript";
 import json from "highlight.js/lib/languages/json";
 import * as d3 from "d3";
-import marked from "marked";
+import {marked} from "marked";
 
 
 hljs.registerLanguage("javascript", javascript);
@@ -26,11 +26,11 @@ interface View {
 }
 
 export default class Presentation extends EventEmitter {
-  private slides: Slide[];
+  private slides: Slide[] = [];
 
-  private currentSlide: Slide;
+  private currentSlide: Slide | undefined;
 
-  private slideSelection: d3.Selection<HTMLDivElement, Slide, any, any>;
+  private slideSelection: d3.Selection<HTMLDivElement, Slide, any, any> | undefined;
 
   constructor(private view: View) {
     super();
@@ -40,6 +40,7 @@ export default class Presentation extends EventEmitter {
   async init() {
     const f =  await fetch(this.view.file);
     const md = await f.text();
+    console.log(marked);
     const html = marked.parse(md);
   
     this.slides = Presentation.htmlToSlides(html);
@@ -61,7 +62,7 @@ export default class Presentation extends EventEmitter {
           .append("div")
           .classed("title-slide", (d) => d.isTitleSlide)
           .text((d) => d.page + 1)
-          .on("click", (ev, d) => this.showSlide(d.page))
+          .on("click", (_, d) => this.showSlide(d.page))
       )
       .classed("selected", (d) => this.currentSlide === d);
     Presentation.fadeInNav();
@@ -73,7 +74,7 @@ export default class Presentation extends EventEmitter {
       .selectAll("div")
       .interrupt("fadeout")
       .transition()
-      .style("transform", undefined)
+      .style("transform", null)
       .style("opacity", 1);
   }
 
@@ -122,9 +123,7 @@ export default class Presentation extends EventEmitter {
 
     slide
       .selectAll<HTMLDivElement, Slide>("div.hljs")
-      .on("click", function (ev, d) {
-        navigator.clipboard.writeText(this.innerText);
-      });
+      .on("click", (ev) => navigator.clipboard.writeText(ev.target.innerText));
 
     return slide
       .selectAll("div > *")
@@ -134,9 +133,9 @@ export default class Presentation extends EventEmitter {
       .transition()
       .duration(600)
       .ease(d3.easeBackOut)
-      .delay((d, i) => 300 + i * 100)
-      .style("transform", undefined)
-      .style("opacity", undefined);
+      .delay((_, i) => 300 + i * 100)
+      .style("transform", null)
+      .style("opacity", null);
   }
 
   static fadeOutSlide(slide: d3.Selection<HTMLDivElement, Slide, any, any>) {
@@ -146,7 +145,7 @@ export default class Presentation extends EventEmitter {
       .transition()
       .duration(600)
       .ease(d3.easeBackInOut)
-      .delay((d, i) => i * 100)
+      .delay((_, i) => i * 100)
       .style("transform", "translate(40px,-10px)")
       .style("opacity", 0)
       .end()
@@ -179,20 +178,22 @@ export default class Presentation extends EventEmitter {
         .replace(/<pre>/g, '<div class="hljs">')
         .replace(/<\/pre>/g, "</div>"),
       title: html.match(/<h\d\s(.*?)>(.*?)<\/h\d>/)
+        // @ts-ignore
         ? html.match(/<h\d\s(.*?)>(.*?)<\/h\d>/)[2]
         : "Presentomatic",
     }));
   }
 
   static toHash(view: View):string {
+    // @ts-ignore
     return new URLSearchParams(view).toString();
   }
 
   static parseHash(): View {
     const p = new URLSearchParams(location.hash.replace('#', ''));
     return {
-      file: p.get('file'),
-      page: +p.get('page')
+      file: p.get('file') || 'INDEX.md',
+      page: +(p.get('page') || 0)
     };
   }
 }

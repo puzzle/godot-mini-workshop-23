@@ -1,7 +1,5 @@
 import { defineConfig } from "vite";
 
-import mdPlugin from "vite-plugin-markdown";
-
 const reloader = () => ({
   name: "custom-hmr",
   enforce: "post",
@@ -19,5 +17,6 @@ const reloader = () => ({
 });
 
 export default defineConfig({
-  plugins: [mdPlugin(), reloader()],
+  base: './',
+  plugins: [reloader()],
 });
