@@ -1,8 +1,13 @@
 import Presentation from "./model/Presentation";
-import marked from "marked";
+
+if (!location.hash) {
+  location.hash = Presentation.toHash({
+    file: "INDEX.md",
+    page: 0
+  });
+}
 
 (async () => {
-  const md = await (await fetch("PRESENTATION.md")).text();
-  const html = marked.parse(md);
-  new Presentation(html);
-})();
+  const view = Presentation.parseHash();
+  new Presentation(view);
+})();  

@@ -7,6 +7,8 @@ import hljs from "highlight.js";
 import javascript from "highlight.js/lib/languages/javascript";
 import json from "highlight.js/lib/languages/json";
 import * as d3 from "d3";
+import marked from "marked";
+
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("json", json);
@@ -18,6 +20,11 @@ interface Slide {
   html: string;
 }
 
+interface View {
+  page: number;
+  file: string;
+}
+
 export default class Presentation extends EventEmitter {
   private slides: Slide[];
 
@@ -25,13 +32,19 @@ export default class Presentation extends EventEmitter {
 
   private slideSelection: d3.Selection<HTMLDivElement, Slide, any, any>;
 
-  constructor(html: string) {
+  constructor(private view: View) {
     super();
+    this.init();
+  }
+
+  async init() {
+    const f =  await fetch(this.view.file);
+    const md = await f.text();
+    const html = marked.parse(md);
+  
     this.slides = Presentation.htmlToSlides(html);
-    console.log(this.slides);
     this.initControls();
-    const start = parseInt(window.location.hash.replace("#", ""), 10);
-    this.showSlide(Number.isNaN(start) ? 0 : start);
+    this.showSlide(this.view.page);
     d3.select("nav")
       .on("mouseenter", () => Presentation.fadeInNav())
       .on("mouseleave", () => {
@@ -76,7 +89,8 @@ export default class Presentation extends EventEmitter {
 
   showSlide(requestedIndex: number) {
     const index = Math.max(0, Math.min(requestedIndex, this.slides.length - 1));
-    window.location.hash = `${index}`;
+    this.view.page = requestedIndex;
+    location.hash = Presentation.toHash(this.view);
     if (this.currentSlide === this.slides[index]) return;
     this.slideSelection = d3
       .select("main")
@@ -142,15 +156,17 @@ export default class Presentation extends EventEmitter {
 
   initControls(): void {
     window.addEventListener("keydown", (ev) => {
-      const currentIndex = this.slides.indexOf(this.currentSlide);
       switch (ev.code) {
         case "ArrowLeft":
-          this.showSlide(currentIndex - 1);
+          if (this.view.page > 0) {
+            this.showSlide(this.view.page - 1);
+          }
           break;
         case "ArrowRight":
-          this.showSlide(currentIndex + 1);
+          if (this.view.page < this.slides.length - 1) {
+            this.showSlide(this.view.page + 1);
+          }
           break;
-        default:
       }
     });
   }
@@ -166,5 +182,17 @@ export default class Presentation extends EventEmitter {
         ? html.match(/<h\d\s(.*?)>(.*?)<\/h\d>/)[2]
         : "Presentomatic",
     }));
+  }
+
+  static toHash(view: View):string {
+    return new URLSearchParams(view).toString();
+  }
+
+  static parseHash(): View {
+    const p = new URLSearchParams(location.hash.replace('#', ''));
+    return {
+      file: p.get('file'),
+      page: +p.get('page')
+    };
   }
 }
