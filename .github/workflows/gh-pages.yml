@@ -14,7 +14,8 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
-        node-version: 'lts'
+        with:
+          node-version: 'lts'
 
       - name: Cache dependencies
         uses: actions/cache@v1
