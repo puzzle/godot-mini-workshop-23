@@ -3,15 +3,33 @@ import "github-markdown-css";
 import "highlight.js/scss/night-owl.scss";
 import "../styles/presentomatic.scss";
 import { EventEmitter } from "events";
-import hljs from "highlight.js";
+import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
+hljs.registerLanguage("javascript", javascript);
 import json from "highlight.js/lib/languages/json";
+hljs.registerLanguage("json", json);
+import asciidoc from "highlight.js/lib/languages/asciidoc";
+hljs.registerLanguage("asciidoc", asciidoc);
+import bash from "highlight.js/lib/languages/bash";
+hljs.registerLanguage("bash", bash);
+import css from "highlight.js/lib/languages/css";
+hljs.registerLanguage("css", css);
+import dart from "highlight.js/lib/languages/dart";
+hljs.registerLanguage("dart", dart);
+import java from "highlight.js/lib/languages/java";
+hljs.registerLanguage("java", java);
+import python from "highlight.js/lib/languages/python";
+hljs.registerLanguage("python", python);
+import ruby from "highlight.js/lib/languages/ruby";
+hljs.registerLanguage("ruby", ruby);
+import rust from "highlight.js/lib/languages/rust";
+hljs.registerLanguage("rust", rust);
+
 import * as d3 from "d3";
 import {marked} from "marked";
 
-
-hljs.registerLanguage("javascript", javascript);
-hljs.registerLanguage("json", json);
+// @ts-ignore GD SCript support
+hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());
 
 interface Slide {
   page: number;

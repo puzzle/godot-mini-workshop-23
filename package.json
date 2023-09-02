@@ -9,17 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/events": "^3.0.0",
     "css-reset-and-normalize": "^2.3.5",
     "d3": "^7.3.0",
     "events": "^3.3.0",
     "github-markdown-css": "^4.0.0",
-    "highlight.js": "^10.6.0",
+    "highlight.js": "^11.8.0",
     "marked": "^7.0.5"
   },
   "devDependencies": {
     "@types/d3": "^7.4.0",
+    "@types/highlight.js": "^10.1.0",
     "@types/marked": "^5.0.1",
+    "@types/events": "^3.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }
