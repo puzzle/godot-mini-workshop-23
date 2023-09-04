@@ -15,10 +15,15 @@
 - Animation
 - UI / Canvas
 - Coding with C#
+
+---
+
+## Not Scope (2)
+
 - Testing
 - In depth 3D (materials, shaders, rendering pipelines, textures)
 - Modeling using blender (maybe a bit?)
-- networking / multiplayer / servers
+- Networking / multiplayer / servers
 
 ---
 
@@ -38,7 +43,7 @@
 
 ---
 
-## Part 3/3 - Scripting in Godot
+## Part 3/3 - Scripting/Programming in Godot
 
 - Introduction to GDScript
 
@@ -102,6 +107,11 @@ https://godotengine.org/download/linux/
 
 ## Controls
 
+- Perspective controls
+
+  - Mouse wheel
+  - Middle Mouse Button
+
 
 ---
 
@@ -122,6 +132,13 @@ https://godotengine.org/download/linux/
 ---
 
 ## Cameras
+
+---
+
+## Godot Nodes
+
+- double click
+- locking
 
 ---
 
