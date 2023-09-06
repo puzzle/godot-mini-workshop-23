@@ -61,9 +61,9 @@ Godot is a Game Programming Engine - inspired by Unity and Unreal Engine.
 
 ---
 
-## What is Godot? (2)
+## Godot is OSS!
 
-Godot is Free and Open Source (MIT).
+Godot is free and Open Source (MIT).
 
 ---
 
@@ -111,58 +111,140 @@ https://godotengine.org/download/linux/
 
 ---
 
-# Godot UI
+# Exercise 1 - Create your first scene!
+
+Learning by doing!
 
 ---
 
-## Controls
+## Create a project
 
-- Perspective controls
-
-  - Mouse wheel
-  - Middle Mouse Button
+![Create a project](create_project.png)
 
 ---
 
-## Godot scenes & node-based system
+## Create your first Scene
+
+![img.png](create_first_scene.png)
 
 ---
 
-## Adding nodes
+## Name the root node
+
+Name is something like `World`.
+
+![img.png](rename_node.png)
 
 ---
 
-## Scene elements
+## Create floor
+
+Add a `CSGBox3D` node to your world.
+
+![img.png](create_node.png)
+
+Name it `Floor`.
 
 ---
 
-## Lights
+## Change size of cube
+
+Change the size of the cube to make a floor tile
+
+![img.png](inspector_size.png)
 
 ---
 
-## Cameras
+## Add material to the floor
+
+![img.png](change_material.png)
 
 ---
 
-## Godot Nodes
+## Change the albedo of the floor
 
-- double click
-- locking
+![img.png](change_albedo_color.png)
+
+Trivia: Albedo is "Rückstrahlvermögen"
 
 ---
+
+## Add a camera
+
+Add a `Camera3D` node to your scene.
+
+Use the handles to move the camera a bit upwards and rotate it downwards.
+
+![img.png](handles.png)
+
+---
+
+## Tip: Use preview and other perspectives!
+
+![img.png](views_perspective.png)
+
+---
+
+## Add a light
+
+Add a `DirectionalLight3D` node to your scene.
+
+1. Use the handles to control the direction of the light.
+2. Make the light cast shadows
+
+![img.png](light_and_shadow.png)
+
+---
+
+## Add a can
+
+1. Add a `CSGCylinder3D` node to your scene.
+2. Name it `Can`.
+3. Resize it to 0.1m radius, 0.2m height
+4. Change the material of your can
+5. Press F5 to play your scene!
+
+Congrats! You have your first scene!
+
+---
+
+# Physics in Godot
+
+---
+
+## Static body
+
+Static bodies are not affected by other forces (gravity, other bodies).
+Used for immovable objects, like walls, obstacles.
+
+---
+
+## Rigid body
+
+Rigid bodies are affected by other bodies and constant forces (gravity).
+Used for movable objects.
+
+---
+
+## Physics simulation using collision shapes
+
+At least 1 collision shape has to be added as child nodes of static/rigid bodies.
+
+![img.png](collision_shapes.png)
+
+---
+
+## Physics material
+
+CONT
+
+---
+
 
 ## CSG - Constructive Solid Geometry
 
 ### Materials
 
-
----
-
-## Exercise 1
-
-* Create a floor
-* Create a table
-* Create a tin can
 
 ---
 
