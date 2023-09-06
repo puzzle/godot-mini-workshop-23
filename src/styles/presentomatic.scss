@@ -87,28 +87,19 @@ nav {
   justify-content: center;
   left: 5vw;
   right: 5vw;
-  > div {
-    margin: 0.1em;
-    padding: 0.1em;
-    cursor: pointer;
-    border-radius: 0.3em;
-    border: 1px solid black;
-    background-color: white;
-    min-width: 2em;
-    text-align: center;
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
-
-    background-color: $normal-slide-bg;
-    color: $normal-slide-fg;
-
-    &.title-slide {
-      background-color: $title-slide-bg;
-      color: $title-slide-fg;
+  svg {
+    stroke-width: 2px;
+    line {
+      stroke: black;
+      stroke-width: 2px;
+    }
+    circle {
+      stroke: white;
+      fill: cadetblue;
     }
 
-    &.selected {
-      border-width: 2px;
-      border-color: red;
+    #interactor {
+      fill: rgba(0,0,0,0);
     }
   }
 }

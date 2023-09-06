@@ -50,6 +50,9 @@ export default class Presentation extends EventEmitter {
 
   private slideSelection: d3.Selection<HTMLDivElement, Slide, any, any> | undefined;
 
+  private scale = d3.scaleLinear()
+      .range([0, 1000]);
+
   constructor(private view: View) {
     super();
     this.init();
@@ -58,7 +61,6 @@ export default class Presentation extends EventEmitter {
   async init() {
     const f =  await fetch(this.view.file);
     const md = await f.text();
-    console.log(marked);
     const html = marked.parse(md);
   
     this.slides = Presentation.htmlToSlides(html);
@@ -69,27 +71,43 @@ export default class Presentation extends EventEmitter {
       .on("mouseleave", () => {
         Presentation.fadeOutNav();
       });
+    d3.select("#indicator")
+        .attr("d", d3.symbol(d3.symbolStar, 60)())
+    d3.select("#interactor")
+        .on("mousemove", (ev) => {
+          const page = ~~this.scale.invert(d3.pointer(ev)[0]);
+          const slide = this.slides[page];
+          d3.select('nav text')
+              .html(slide.title);
+        })
+        .on("click", (ev) => {
+          const page = ~~this.scale.invert(d3.pointer(ev)[0]);
+          this.showSlide(page);
+        });
   }
 
   updateNav() {
-    d3.select("nav")
-      .selectAll<HTMLDivElement, any>("div")
-      .data(this.slides, (d) => d.index)
-      .join((enter) =>
-        enter
-          .append("div")
-          .classed("title-slide", (d) => d.isTitleSlide)
-          .text((d) => d.page + 1)
-          .on("click", (_, d) => this.showSlide(d.page))
-      )
-      .classed("selected", (d) => this.currentSlide === d);
+    this.scale.domain([0, this.slides.length]);
+    d3.select("#mainslides")
+        .selectAll<SVGCircleElement, Slide>("circle")
+        .data(this.slides.filter(s => s.isTitleSlide), (d) => `${d.page}_${d.title}`)
+        .join("circle")
+        .attr("cx", slide => this.scale(slide.page))
+        .attr("r", 10);
+
+    d3.select('#indicator')
+        .transition()
+        .ease(d3.easeBackInOut)
+        .duration(1000)
+        .attr('transform', `translate(${this.scale(this.currentSlide?.page || 0)},-20)`)
+
     Presentation.fadeInNav();
     Presentation.fadeOutNav();
   }
 
   static fadeInNav() {
     d3.select("nav")
-      .selectAll("div")
+      .selectAll("svg")
       .interrupt("fadeout")
       .transition()
       .style("transform", null)
@@ -98,11 +116,11 @@ export default class Presentation extends EventEmitter {
 
   static fadeOutNav() {
     d3.select("nav")
-      .selectAll("div")
+      .selectAll("svg")
       .interrupt("fadeout")
       .transition("fadeout")
       .delay(3000)
-      .style("transform", "scale(0.1)rotate(-90deg)")
+      .style("transform", "scale(0.1,1)")
       .style("opacity", 0);
   }
 
@@ -195,10 +213,10 @@ export default class Presentation extends EventEmitter {
       html: html
         .replace(/<pre>/g, '<div class="hljs">')
         .replace(/<\/pre>/g, "</div>"),
-      title: html.match(/<h\d\s(.*?)>(.*?)<\/h\d>/)
+      title: html.match(/<h\d\s*(.*?)>(.*?)<\/h\d>/)
         // @ts-ignore
-        ? html.match(/<h\d\s(.*?)>(.*?)<\/h\d>/)[2]
-        : "Presentomatic",
+        ? `[${page+1}] : ${html.match(/<h\d\s*(.*?)>(.*?)<\/h\d>/)[2]}`
+        : `[${page+1}]`,
     }));
   }
 
