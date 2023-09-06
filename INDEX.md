@@ -7,6 +7,8 @@
 - Learn about Godot
 - Make your first little physics game
 
+![My first game](sandbox_game.png)
+
 ---
 
 ## Not Scope
@@ -22,7 +24,7 @@
 
 - Testing
 - In depth 3D (materials, shaders, rendering pipelines, textures)
-- Modeling using blender (maybe a bit?)
+- Modeling using blender
 - Networking / multiplayer / servers
 
 ---
@@ -46,6 +48,10 @@
 ## Part 3/3 - Scripting/Programming in Godot
 
 - Introduction to GDScript
+
+---
+
+# What is Godot?
 
 ---
 
@@ -85,7 +91,11 @@ Main Programming languages:
 
 ---
 
-## Installing Godot 4.0
+# Installing Godot 4.x
+
+---
+
+## Installing Godot 4.x
 
 Ubuntu/Debian:
 
@@ -101,7 +111,7 @@ https://godotengine.org/download/linux/
 
 ---
 
-## Godot UI
+# Godot UI
 
 ---
 
@@ -111,7 +121,6 @@ https://godotengine.org/download/linux/
 
   - Mouse wheel
   - Middle Mouse Button
-
 
 ---
 
