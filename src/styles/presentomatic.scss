@@ -95,11 +95,15 @@ nav {
     }
     circle {
       stroke: white;
-      fill: cadetblue;
+      fill: $normal-slide-fg;
     }
 
     #interactor {
       fill: rgba(0,0,0,0);
+    }
+    #indicator {
+      stroke: white;
+      fill: $normal-slide-fg;
     }
   }
 }

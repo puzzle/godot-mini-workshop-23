@@ -26,10 +26,10 @@ import rust from "highlight.js/lib/languages/rust";
 hljs.registerLanguage("rust", rust);
 
 import * as d3 from "d3";
-import {marked} from "marked";
+import { marked } from "marked";
 
 // @ts-ignore GD SCript support
-hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());
+hljs.registerLanguage("gdscript", function () { "use strict"; var e = e || {}; function r(e) { return { aliases: ["godot", "gdscript"], keywords: { keyword: "and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync", built_in: "Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray", literal: "true false null" }, contains: [e.NUMBER_MODE, e.HASH_COMMENT_MODE, { className: "comment", begin: /"""/, end: /"""/ }, e.QUOTE_STRING_MODE, { variants: [{ className: "function", beginKeywords: "func" }, { className: "class", beginKeywords: "class" }], end: /:/, contains: [e.UNDERSCORE_TITLE_MODE] }] } } return e.exports = function (e) { e.registerLanguage("gdscript", r) }, e.exports.definer = r, e.exports.definer || e.exports }());
 
 interface Slide {
   page: number;
@@ -51,7 +51,7 @@ export default class Presentation extends EventEmitter {
   private slideSelection: d3.Selection<HTMLDivElement, Slide, any, any> | undefined;
 
   private scale = d3.scaleLinear()
-      .range([0, 1000]);
+    .range([0, 1000]);
 
   constructor(private view: View) {
     super();
@@ -59,10 +59,10 @@ export default class Presentation extends EventEmitter {
   }
 
   async init() {
-    const f =  await fetch(this.view.file);
+    const f = await fetch(this.view.file);
     const md = await f.text();
     const html = marked.parse(md);
-  
+
     this.slides = Presentation.htmlToSlides(html);
     this.initControls();
     this.showSlide(this.view.page);
@@ -72,34 +72,41 @@ export default class Presentation extends EventEmitter {
         Presentation.fadeOutNav();
       });
     d3.select("#indicator")
-        .attr("d", d3.symbol(d3.symbolStar, 60)())
+      .attr("d", d3.symbol(d3.symbolTriangle, 60)())
     d3.select("#interactor")
-        .on("mousemove", (ev) => {
-          const page = ~~this.scale.invert(d3.pointer(ev)[0]);
-          const slide = this.slides[page];
-          d3.select('nav text')
-              .html(slide.title);
-        })
-        .on("click", (ev) => {
-          const page = ~~this.scale.invert(d3.pointer(ev)[0]);
-          this.showSlide(page);
-        });
+      .on("mousemove", (ev) => {
+        const page = ~~this.scale.invert(d3.pointer(ev)[0]);
+        const slide = this.slides[page];
+        d3.select('nav text')
+          .html(slide.title);
+        d3.select("nav")
+          .selectAll("svg")
+          .interrupt("fadeout")
+      })
+      .on("mouseleave", () => {
+        d3.select('nav text')
+          .html('');
+      })
+      .on("click", (ev) => {
+        const page = ~~this.scale.invert(d3.pointer(ev)[0]);
+        this.showSlide(page);
+      });
   }
 
   updateNav() {
     this.scale.domain([0, this.slides.length]);
     d3.select("#mainslides")
-        .selectAll<SVGCircleElement, Slide>("circle")
-        .data(this.slides.filter(s => s.isTitleSlide), (d) => `${d.page}_${d.title}`)
-        .join("circle")
-        .attr("cx", slide => this.scale(slide.page))
-        .attr("r", 10);
+      .selectAll<SVGCircleElement, Slide>("circle")
+      .data(this.slides.filter(s => s.isTitleSlide), (d) => `${d.page}_${d.title}`)
+      .join("circle")
+      .attr("cx", slide => this.scale(slide.page))
+      .attr("r", 10);
 
     d3.select('#indicator')
-        .transition()
-        .ease(d3.easeBackInOut)
-        .duration(1000)
-        .attr('transform', `translate(${this.scale(this.currentSlide?.page || 0)},-20)`)
+      .transition()
+      .ease(d3.easeBackInOut)
+      .duration(1000)
+      .attr('transform', `translate(${this.scale(this.currentSlide?.page || 0)},-20)rotate(60)`)
 
     Presentation.fadeInNav();
     Presentation.fadeOutNav();
@@ -186,7 +193,7 @@ export default class Presentation extends EventEmitter {
       .style("opacity", 0)
       .end()
       .then(() => slide.remove())
-      .catch(() => {});
+      .catch(() => { });
   }
 
   initControls(): void {
@@ -215,12 +222,12 @@ export default class Presentation extends EventEmitter {
         .replace(/<\/pre>/g, "</div>"),
       title: html.match(/<h\d\s*(.*?)>(.*?)<\/h\d>/)
         // @ts-ignore
-        ? `[${page+1}] : ${html.match(/<h\d\s*(.*?)>(.*?)<\/h\d>/)[2]}`
-        : `[${page+1}]`,
+        ? `[${page + 1}] : ${html.match(/<h\d\s*(.*?)>(.*?)<\/h\d>/)[2]}`
+        : `[${page + 1}]`,
     }));
   }
 
-  static toHash(view: View):string {
+  static toHash(view: View): string {
     // @ts-ignore
     return new URLSearchParams(view).toString();
   }
