@@ -365,93 +365,227 @@ Make sure the size matches your `can`!
 
 ---
 
-CONT
+## Make your scene more interesting
+
+* Duplicate your `can`
+
+![img.png](cans.png)
 
 ---
 
-## CSG - Constructive Solid Geometry
-
-### Materials
-
+## Enjoy your physics sandbox!
 
 ---
 
-## Physics in Godot
+# GDScript
 
-
----
-
-## Static bodies
+How actual programming works in Godot
 
 ---
 
-## Rigid bodies
+## GDScript
+
+Inspired by python, but isn't python.
 
 ---
 
-## Car
+## Basic syntax
+
+```gdscript
+# This is a comment
+
+func isEven(number):
+    return number % 2 == 0
+
+func isOdd(number: int):
+   return number % 2 == 1
+
+# Function that does nothing
+func noOp:
+    pass
+
+func helloWorld():
+    var n : int = 42
+    var f : float = 42.42
+    var message : String = "Hello World"
+    var b : bool = true
+    print(n,f,s,b)
+```
+
+More:
+
+[[GDScript Basics]](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html)
 
 ---
 
-## Exercise 2
+## Formatted strings
 
-* Make floor and table static body
-* Make the tin can a rigid body
-* Save the tin can into a scene
-* Make more tin cans
-* Make a ball
-* Set physics properties
+```gdscript
+func formatted():
+    var firstName = "John"
+    var lastName = "Smith"
+    
+    # Array
+    print("Hello %s %s" % [firstName, lastName])
+    
+    # Dictionary
+    print("Hello {f} {l}" % {"f": firstName, "l": lastName})
+```
 
----
-
-## GD Script
-
-Python inspired.
-`@onready`
-`@export`
-`class_name`
-`@icon`
-`extends`
-
-https://docs.godotengine.org/en/stable/classes/class_%40gdscript.html#class-gdscript
+[[Format specifiers]](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_format_string.html#format-specifiers)
 
 ---
 
-## Scripts on nodes
+## Good to know classes
 
-* _ready()
-* _process(delta)
-* _input(event)
-
----
-
-## Type hints
+* `Vector2` / `Vector3`
+* `Color`
 
 ---
 
-## Static variables
+## Arrays
+
+```gdscript
+
+var my_lucky_numbers : Array[int] = [1,2,3]
+
+```
 
 ---
 
-## Debugging
+## Nodes and Scripts
+
+A node in the scene tree can have at maximum a script.
+
+![img.png](scripts.png)
 
 ---
 
-## Mouse look script
+## Overridable functions for a `Node`
+
+```gdscript
+# Called when both the node and its children have entered the scene tree.
+func _ready():
+    pass
+
+# Called every frame, as often as possible.
+func _process(delta):
+    pass
+
+# Called once for every event, before _unhandled_input(), allowing you to
+# consume some events.
+func _input(event: InputEvent):
+    pass
+```
+
+[[More]](https://docs.godotengine.org/en/stable/tutorials/scripting/overridable_functions.html#overridable-functions)
 
 ---
 
-## Instancing scenes in a scene
+## Other useful keywords / annotations
+
+* `class_name Foo` makes this class "globally" available, for instancing or type hints. Useful for libraries.
+* `@export` makes a variable editable in the editor
+* `@onready` statement is run after the script is in the scene tree.
 
 ---
 
-## Exercise 3
-
-* Add the mouse look script
-* Mouse click: throws a ball
-* reset scene
-* (optional): Scores
+# Exercise 4 - Handle user input
 
 ---
 
-## You're FREE
+## Add a script on the camera
+
+![img.png](add_script.png)
+
+---
+
+## Preload `can.tscn`
+
+Add this snipped:
+
+```gdscript
+
+extends Camera3D
+
+@export
+var throwForce : float = 10
+
+const canScene = preload("res://can.tscn") as PackedScene
+
+func _input(event):
+	if event is InputEventMouseButton:
+		var mouseEvent = event as InputEventMouseButton
+		if mouseEvent.button_index == MOUSE_BUTTON_LEFT and mouseEvent.is_pressed():
+			# Make an instance of the can
+			var instance = canScene.instantiate()
+			$"..".add_child(instance)
+
+			# Move the can to the position of the camera
+			instance.transform = transform
+
+			# Throw in the look direction
+			# The camera always "looks" behind it's base
+			var direction = -self.global_transform.basis.z
+			instance.apply_impulse(direction * throwForce)
+```
+
+---
+
+## Huh, I'm already done?! Too easy bruh.
+
+Ok so here's some more exercises:
+
+Easy:
+
+* Play with some physics parameters.
+* Throw a ball instead of a can.
+* Throw a giant ball instead of a can.
+* Create some more interesting obstacles and furniture.
+* Make your scene more interesting by adding spotlights, omni lights.
+
+---
+
+## Still too easy? Medium difficulty:
+
+Make an actual "game". Learn about collision detection and count how many cans you hit.
+
+* Use `RigidBody3D.contact_monitor` and `RigidBody3D.max_contacts_reported`
+
+---
+
+## Medium difficulty (2)
+
+Make even more interesting physics objects using [joints](https://docs.godotengine.org/en/stable/classes/class_joint3d.html).
+
+---
+
+## Medium difficulty (3)
+
+Sound:
+
+* Add some music to your game using `AudioStreamPlayer`
+* Add some sound effects using `AudioStreamPlayer3D`, `AudioListener3D`, when objects hit each other.
+
+---
+
+## Medium difficulty (4)
+
+Learn about [UI](https://docs.godotengine.org/en/stable/tutorials/ui/index.html).
+
+---
+
+## Medium difficulty (5)
+
+Learn Blender and model some cool furniture there to import into Godot.
+
+---
+
+## Hard difficulty
+
+* Make a car simulator using `VehicleBody3D`.
+* Make a drone / helicopter simulator using `RigidBody3D`
+
+---
+
+## The end
