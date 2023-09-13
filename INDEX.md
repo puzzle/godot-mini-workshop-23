@@ -48,6 +48,7 @@
 ## Part 3/3 - Scripting/Programming in Godot
 
 - Introduction to GDScript
+- Exercise 3 - Add your first script
 
 ---
 
@@ -58,6 +59,8 @@
 ## What is Godot?
 
 Godot is a Game Programming Engine - inspired by Unity and Unreal Engine.
+
+![Battle](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.itch.zone%2FaW1hZ2UyL2phbS82NDAzLzEyMTMyNDIucG5n%2Foriginal%2F6BCZIr.png&f=1&nofb=1&ipt=33fb67ec95402c822b5f329586320a049035522b4f2d60c59c946257d4eba311&ipo=images)
 
 ---
 
@@ -203,6 +206,7 @@ Add a `DirectionalLight3D` node to your scene.
 3. Resize it to 0.1m radius, 0.2m height
 4. Change the material of your can
 5. Press F5 to play your scene!
+![img.png](can.png)
 
 ---
 
@@ -281,6 +285,19 @@ You've earned yourself a break!
 ---
 
 # Physics in Godot
+
+---
+
+## Physics in Godot
+
+Is a simulation of "real world physics" (Newton laws of motion - aka forces, impulses) using rigid bodies.
+Rigid bodies are bodies that do not deform during interactions.
+
+Other rigid body engines:
+
+* Box2D
+* Nvidia PhysX
+* Havok Engine
 
 ---
 
@@ -436,10 +453,19 @@ func formatted():
 
 ---
 
-## Good to know classes
+## Good to know Godot classes
 
-* `Vector2` / `Vector3`
-* `Color`
+### Vectors: `Vector2` / `Vector3`
+
+```gdscript
+# (0,0,3)
+var addition = Vector3(0,0,1) + Vector3(1,0,0)
+var multiplication = Vector3.FORWARD * 3
+```
+
+[Vector3 Docs](https://docs.godotengine.org/en/stable/classes/class_vector3.html)
+
+[Other variant types](https://docs.godotengine.org/en/stable/classes/index.html#variant-types)
 
 ---
 
@@ -490,7 +516,24 @@ func _input(event: InputEvent):
 
 ---
 
-# Exercise 4 - Handle user input
+## Remove `Node` from scene trees
+
+```gdscript
+
+# self destroying object
+
+var ttl = 1000
+
+func _process(delta: float):
+    ttl -= delta
+    
+    if (ttl < 0):
+        queue_free(self)
+```
+
+---
+
+# Exercise 3 - Handle user input
 
 ---
 
@@ -539,6 +582,7 @@ Ok so here's some more exercises:
 Easy:
 
 * Play with some physics parameters.
+* Make it rain cans.
 * Throw a ball instead of a can.
 * Throw a giant ball instead of a can.
 * Create some more interesting obstacles and furniture.
