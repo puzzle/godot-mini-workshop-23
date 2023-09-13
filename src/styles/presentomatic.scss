@@ -24,7 +24,7 @@ main {
 
   > div {
     position: fixed;
-    padding: 5vh 10vw;
+    padding: 5% 10% 10% 10%;
     height: 100vh;
     width: 100vw;
     overflow: auto;
@@ -39,17 +39,19 @@ main {
     }
 
     > div.hljs {
+      font-size: 60%;
       position: relative;
       cursor: pointer;
       border-radius: 0.4em;
       margin: 0.5em 0;
+      padding: 0.5em;
       white-space: pre;
       overflow: hidden;
 
       &::after {
         position: absolute;
         right: 1em;
-        bottom: 1.5em;
+        top: 1.5em;
         opacity: 0.3;
         font-size: 60%;
         content: "Click to copy";
@@ -80,6 +82,7 @@ main {
 
 nav {
   position: fixed;
+  height: 10vh;
   bottom: 1em;
   display: flex;
   flex-wrap: wrap;
@@ -104,6 +107,14 @@ nav {
     #indicator {
       stroke: white;
       fill: $normal-slide-fg;
+    }
+    text {
+      paint-order: stroke fill;
+      stroke: rgba(255,255,255,0.8);
+      stroke-width: 3px;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+      fill: #000000;
     }
   }
 }
